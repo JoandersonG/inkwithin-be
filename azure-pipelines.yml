@@ -19,17 +19,17 @@ steps:
     mavenPomFile: 'pom.xml'
     goals: 'clean package'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'acr-connection'
-    repository: '$(acrName)/$(repositoryName)'
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-    tags: |
-      $(imageTag)
+# - task: Docker@2
+#   inputs:
+#     containerRegistry: 'acr-connection'
+#     repository: '$(acrName)/$(repositoryName)'
+#     command: 'buildAndPush'
+#     Dockerfile: '**/Dockerfile'
+#     tags: |
+#       $(imageTag)
 
-- task: AzureContainerApps@1
-  inputs:
-    azureSubscription: 'azure-connection'
-    appName: 'inkwithin-app'
-    imageToDeploy: '$(acrName)/$(repositoryName):$(imageTag)'
+# - task: AzureContainerApps@1
+#   inputs:
+#     azureSubscription: 'azure-connection'
+#     appName: 'inkwithin-app'
+#     imageToDeploy: '$(acrName)/$(repositoryName):$(imageTag)'
