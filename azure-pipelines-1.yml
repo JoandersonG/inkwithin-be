@@ -22,7 +22,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build and push stage
+  displayName: Build, push and deploy stage
   jobs:
   - job: Build
     displayName: Build
@@ -45,3 +45,9 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+    - task: AzureContainerApps@1
+      inputs:
+        azureSubscription: 'my-subscription-service-connection'
+        containerAppName: 'inkwithin-be'
+        resourceGroup: 'inkwithin'
+        imageToDeploy: ' $(dockerfilePath)/$(imageRepository):$(Build.BuildId)'
