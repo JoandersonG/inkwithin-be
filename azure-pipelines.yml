@@ -11,7 +11,7 @@ pool:
 variables:
   acrName: 'inkwithin.azurecr.io'
   repositoryName: 'inkwithin-be'
-  imageTag: 'latest'
+  imageTag: '0.0.1-SNAPSHOT'
 
 steps:
 - task: Maven@3
@@ -19,14 +19,14 @@ steps:
     mavenPomFile: 'pom.xml'
     goals: 'clean package'
 
-# - task: Docker@2
-#   inputs:
-#     containerRegistry: 'acr-connection'
-#     repository: '$(acrName)/$(repositoryName)'
-#     command: 'buildAndPush'
-#     Dockerfile: '**/Dockerfile'
-#     tags: |
-#       $(imageTag)
+- task: Docker@2
+  inputs:
+    containerRegistry: 'inkwithin'
+    repository: '$(acrName)/$(repositoryName)'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: |
+      $(imageTag)
 
 # - task: AzureContainerApps@1
 #   inputs:
