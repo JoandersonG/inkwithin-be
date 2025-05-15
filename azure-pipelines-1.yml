@@ -47,18 +47,19 @@ stages:
           $(tag)
 
 - stage: Deploy
+  dependsOn: Build
   displayName: Deploy to Azure
   jobs:
   - job: Deploy
     displayName: Deploy
     pool:
       name: Default
-    container:
-      image: mcr.microsoft.com/azure-cli
+    # container:
+    #   image: mcr.microsoft.com/azure-cli
     steps:
     - task: AzureContainerApps@1
       inputs:
         azureSubscription: 'AzureRM'
         containerAppName: 'inkwithin-be'
         resourceGroup: 'inkwithin'
-        imageToDeploy: ' $(dockerfilePath)/$(imageRepository):$(Build.BuildId)'
+        imageToDeploy: ' $(containerRegistry)/$(imageRepository):$(Build.BuildId)'
