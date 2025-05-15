@@ -22,7 +22,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build, push and deploy stage
+  displayName: Build and push the image
   jobs:
   - job: Build
     displayName: Build
@@ -46,6 +46,9 @@ stages:
         tags: |
           $(tag)
 
+stages:
+- stage: Deploy
+  displayName: Deploy to Azure
   - job: Deploy
     displayName: Deploy
     pool:
