@@ -30,6 +30,8 @@ stages:
     #   vmImage: $(vmImageName)
     pool:
       name: Default
+    container:
+      image: mcr.microsoft.com/azure-cli
     steps:
     - task: Maven@3
       inputs:
