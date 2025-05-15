@@ -47,7 +47,7 @@ stages:
           $(tag)
     - task: AzureContainerApps@1
       inputs:
-        azureSubscription: 'my-subscription-service-connection'
+        azureSubscription: 'dc1163f8-0cd8-4294-aa5d-5c2a57c424dc'
         containerAppName: 'inkwithin-be'
         resourceGroup: 'inkwithin'
         imageToDeploy: ' $(dockerfilePath)/$(imageRepository):$(Build.BuildId)'
