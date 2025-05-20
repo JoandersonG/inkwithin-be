@@ -21,7 +21,7 @@ public class PostController {
         return postService.getTotal();
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public List<Post> getAll() {
         return postService.getAll();
     }
