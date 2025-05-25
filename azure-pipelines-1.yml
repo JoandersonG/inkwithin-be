@@ -47,6 +47,22 @@ stages:
     pool:
       name: Default
     steps:
+    - checkout: self
+      fetchDepth: 0  # Necessário para poder criar tags
+
+    - script: |
+        git config user.name "Azure Pipelines"
+        git config user.email "build@azuredevops.com"
+
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        TAG="v$VERSION"
+
+        echo "Versão detectada: $TAG"
+
+        git tag $TAG
+        git push origin $TAG
+      displayName: "Gerar e enviar tag com versão do pom.xml"
+
     - task: Maven@3
       inputs:
         mavenPomFile: 'pom.xml'
