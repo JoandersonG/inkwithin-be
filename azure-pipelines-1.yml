@@ -18,7 +18,7 @@ variables:
 
 parameters:
 - name: deployToAzure
-  displayName: Deploy to Azure?
+  displayName: Deploy Application to Production?
   type: boolean
   default: false
 
@@ -85,4 +85,4 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - script: echo "⚠️ Deploy foi pulado porque o parâmetro 'Deploy to Azure?' não foi marcado na execução manual."
+    - script: echo "⚠️ Deploy foi pulado porque o parâmetro 'Deploy Application to Production?' não foi marcado na execução manual."
