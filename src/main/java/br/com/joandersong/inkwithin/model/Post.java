@@ -1,10 +1,14 @@
 package br.com.joandersong.inkwithin.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "post")
 public class Post {
     @Id
