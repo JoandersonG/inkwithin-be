@@ -16,6 +16,12 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
+parameters:
+- name: deployToAzure
+  displayName: Deploy to Azure?
+  type: boolean
+  default: false
+
 stages:
 
 - stage: Test
@@ -32,11 +38,6 @@ stages:
         goals: 'clean test'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    
-    - task: Maven@3
-      inputs:
-        mavenPomFile: 'pom.xml'
-        goals: 'package -DskipTests'
 
 - stage: Build
   displayName: Build and push the image
@@ -64,6 +65,7 @@ stages:
 - stage: Deploy
   dependsOn: Build
   displayName: Deploy to Azure
+  condition: and(succeeded(), eq('${{ parameters.deployToAzure }}', true))
   jobs:
   - job: Deploy
     displayName: Deploy
