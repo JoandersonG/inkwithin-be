@@ -48,6 +48,7 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - checkout: self
+      persistCredentials: true
       fetchDepth: 0  # Necessário para poder criar tags
 
     - script: |
