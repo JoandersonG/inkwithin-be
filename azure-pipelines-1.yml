@@ -78,11 +78,3 @@ stages:
         containerAppName: 'inkwithin-be'
         resourceGroup: 'inkwithin'
         imageToDeploy: ' $(containerRegistry)/$(imageRepository):$(Build.BuildId)'
-  
-  - job: DeploySkipped
-    displayName: Skipping Deploy
-    condition: ne('${{ parameters.deployToAzure }}', true)
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - script: echo "⚠️ Deploy foi pulado porque o parâmetro 'Deploy Application to Production?' não foi marcado na execução manual."
