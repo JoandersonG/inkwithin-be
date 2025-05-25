@@ -45,7 +45,7 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      name: Default
+      vmImage: 'ubuntu-latest'
     steps:
     - checkout: self
       fetchDepth: 0  # Necessário para poder criar tags
@@ -55,7 +55,7 @@ stages:
         git config user.email "build@azuredevops.com"
 
         VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-        TAG="v$VERSION"
+        TAG="$VERSION"
 
         echo "Versão detectada: $TAG"
 
