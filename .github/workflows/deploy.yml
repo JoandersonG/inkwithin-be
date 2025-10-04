@@ -54,7 +54,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             # Move service file to systemd directory
-            sudo mv /tmp/inkwithin.service /etc/systemd/system/inkwithin.service
+            sudo mv /tmp/deploy/inkwithin.service /etc/systemd/system/inkwithin.service
             sudo systemctl daemon-reload
             sudo systemctl enable inkwithin
 
