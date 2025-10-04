@@ -1,0 +1,17 @@
+[Unit]
+Description=InkWithin backend application
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/app/target
+ExecStart=/usr/bin/java -jar /home/ubuntu/app/target/inkwithin.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=5
+StandardOutput=append:/home/ubuntu/app/inkwithin-root.log
+StandardError=append:/home/ubuntu/app/inkwithin-error.log
+Environment=SPRING_PROFILES_ACTIVE=prod
+
+[Install]
+WantedBy=multi-user.target

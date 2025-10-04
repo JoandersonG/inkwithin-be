@@ -1,26 +1,31 @@
-name: Deploy Java App to EC2
+name: Deploy to EC2
 
 on:
   push:
-    branches: ["main"]   # só roda quando houver push na main
+    branches:
+      - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # 1. Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. Set up JDK
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          distribution: temurin
+          java-version: 17
 
+      # 3. Build with Maven
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
+      # 4. Upload JAR to EC2 (with version in filename)
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -30,16 +35,33 @@ jobs:
           source: "target/*.jar"
           target: "/home/ubuntu/app/"
 
-      - name: Restart app on EC2
+      # 5. Upload systemd service file
+      - name: Copy systemd service file
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          source: "deploy/inkwithin.service"
+          target: "/tmp/inkwithin.service"
+
+      # 6. Update symlink & restart service
+      - name: Update service and restart
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            # Para qualquer instância anterior
-            pkill -f 'java -jar' || true
+            # Move service file to systemd directory
+            sudo mv /tmp/inkwithin.service /etc/systemd/system/inkwithin.service
+            sudo systemctl daemon-reload
+            sudo systemctl enable inkwithin
 
-            # Inicia novamente
-            nohup java -jar /home/ubuntu/app/target/*.jar > /home/ubuntu/app/app.log 2>&1 & disown
-            echo "Aplicação iniciada!"
+            # Update symlink to always point to latest JAR
+            LATEST_JAR=$(ls -t /home/ubuntu/app/target/*.jar | head -n1)
+            ln -sfn "$LATEST_JAR" /home/ubuntu/app/target/inkwithin.jar
+
+            # Restart service
+            sudo systemctl restart inkwithin
+            sudo systemctl status inkwithin --no-pager -l
